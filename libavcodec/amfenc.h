@@ -76,6 +76,8 @@ typedef struct AMFEncoderContext {
     int                 ref_b_frame_delta_qp;
     int                 bit_depth;
     int                 smart_access_video;
+    int                 multihw;
+    int                 vcnidx;
 
     // Dynamic options, can be set after Init() call
 
