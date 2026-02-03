@@ -246,10 +246,10 @@ static av_cold int amf_encode_init_hevc(AVCodecContext *avctx)
     }
 
     // Wallboy vcnidx and multihw additions
-    if (avctx->multihw != -1) {
+    if (ctx->multihw != -1) {
         AMF_ASSIGN_PROPERTY_BOOL(res, ctx->encoder, AMF_VIDEO_ENCODER_HEVC_MULTI_HW_INSTANCE_ENCODE, ((ctx->multihw == 0) ? false : true));
     }
-    if (avctx->vcnidx != -1) {
+    if (ctx->vcnidx != -1) {
         AMF_ASSIGN_PROPERTY_INT64(res, ctx->encoder, AMF_VIDEO_ENCODER_HEVC_INSTANCE_INDEX, ctx->vcnidx);
     }
 
