@@ -138,6 +138,7 @@ typedef struct AMFEncoderContext {
     int                 pa_taq_mode;
     int                 pa_high_motion_quality_boost_mode;
     int                 pa_adaptive_mini_gop;
+    int                 pa_engine_type;
 
 
 } AMFEncoderContext;
