@@ -160,6 +160,20 @@ static const AVOption options[] = {
     { "pa_high_motion_quality_boost_mode",      "Sets the PA high motion quality boost mode",                   OFFSET(pa_high_motion_quality_boost_mode),      AV_OPT_TYPE_INT,    {.i64 = -1 }, -1, AMF_PA_HIGH_MOTION_QUALITY_BOOST_MODE_AUTO, VE , .unit = "high_motion_quality_boost_mode" },
     { "none",                                   "no high motion quality boost",     0, AV_OPT_TYPE_CONST, {.i64 = AMF_PA_HIGH_MOTION_QUALITY_BOOST_MODE_NONE   }, 0, 0, VE, .unit = "high_motion_quality_boost_mode" },
     { "auto",                                   "auto high motion quality boost",   0, AV_OPT_TYPE_CONST, {.i64 = AMF_PA_HIGH_MOTION_QUALITY_BOOST_MODE_AUTO   }, 0, 0, VE, .unit = "high_motion_quality_boost_mode" },
+
+    { "pa_engine_type",                         "Sets the PA Engine Type",                   OFFSET(pa_engine_type),      AV_OPT_TYPE_INT,    {.i64 = -1 }, -1, 11, VE , .unit = "engine_type" },
+    { "Unknown",                                "Unknown Engine Type (Auto)",                                    0, AV_OPT_TYPE_CONST, {.i64 = 0  }, 0, 0, VE, .unit = "engine_type" },
+    { "Host",                                   "Host Engine Type",                                              0, AV_OPT_TYPE_CONST, {.i64 = 1  }, 0, 0, VE, .unit = "engine_type" },
+    { "DX9",                                    "DX9 Engine Type",                                               0, AV_OPT_TYPE_CONST, {.i64 = 2  }, 0, 0, VE, .unit = "engine_type" },
+    { "DX11",                                   "DX11 Engine Type",                                              0, AV_OPT_TYPE_CONST, {.i64 = 3  }, 0, 0, VE, .unit = "engine_type" },
+    { "OpenCL",                                 "OpenCL",                                                        0, AV_OPT_TYPE_CONST, {.i64 = 4  }, 0, 0, VE, .unit = "engine_type" },
+    { "OpenGL",                                 "OpenGL",                                                        0, AV_OPT_TYPE_CONST, {.i64 = 5  }, 0, 0, VE, .unit = "engine_type" },
+    { "XV",                                     "XV Engine Type",                                                0, AV_OPT_TYPE_CONST, {.i64 = 6  }, 0, 0, VE, .unit = "engine_type" },
+    { "Gralloc",                                "Gralloc Engine Type (Android)",                                 0, AV_OPT_TYPE_CONST, {.i64 = 7  }, 0, 0, VE, .unit = "engine_type" },
+    { "Compute for DX9",                        "Compute for DX9 Engine Type (Deprecated: Same as OpenCL)",      0, AV_OPT_TYPE_CONST, {.i64 = 8  }, 0, 0, VE, .unit = "engine_type" },
+    { "Compute for DX11",                       "Compute for DX11 Engine Type (Deprecated: Same as OpenCL)",     0, AV_OPT_TYPE_CONST, {.i64 = 9  }, 0, 0, VE, .unit = "engine_type" },
+    { "Vulkan",                                 "Vulkan Engine Type",                                            0, AV_OPT_TYPE_CONST, {.i64 = 10 }, 0, 0, VE, .unit = "engine_type" },
+    { "DX12",                                   "DX12 Engine Type",                                              0, AV_OPT_TYPE_CONST, {.i64 = 11 }, 0, 0, VE, .unit = "engine_type" },
     { NULL }
 };
 
@@ -245,12 +259,15 @@ static av_cold int amf_encode_init_hevc(AVCodecContext *avctx)
         AMF_ASSIGN_PROPERTY_RATIO(res, ctx->encoder, AMF_VIDEO_ENCODER_HEVC_ASPECT_RATIO, ratio);
     }
 
-    // Wallboy vcnidx and multihw additions
+    // Wallboy vcnidx, multihw, and pa_engine_type additions
     if (ctx->multihw != -1) {
         AMF_ASSIGN_PROPERTY_BOOL(res, ctx->encoder, AMF_VIDEO_ENCODER_HEVC_MULTI_HW_INSTANCE_ENCODE, ((ctx->multihw == 0) ? false : true));
     }
     if (ctx->vcnidx != -1) {
         AMF_ASSIGN_PROPERTY_INT64(res, ctx->encoder, AMF_VIDEO_ENCODER_HEVC_INSTANCE_INDEX, ctx->vcnidx);
+    }
+    if (ctx->pa_engine_type != -1) {
+        AMF_ASSIGN_PROPERTY_INT64(res, ctx->encoder, AMF_PA_ENGINE_TYPE, ctx->pa_engine_type);
     }
 
     // Color bit depth
